@@ -49,6 +49,7 @@ if __name__ == '__main__':
     #     filename = filename.strip()
     #     author = author.strip()
     #     download_txt(url, filename, num_book)
+
     for i in range(1, 11):
         url = f'https://tululu.org/b{i}/'
         response = requests.get(url)
@@ -59,8 +60,13 @@ if __name__ == '__main__':
             continue
         soup = BeautifulSoup(response.text, 'lxml')
         relative_url = soup.find('div', class_='bookimage').find('img')['src']
-        # title, author = soup.find('h1').text.split('::')
+        title, author = soup.find('h1').text.split('::')
+        comments = soup.find_all('div', class_='texts')
         img_url = urljoin('https://tululu.org/', relative_url)
         img_name = relative_url.split('/')[-1]
-        download_img(img_url, img_name)
+        print(f'Автор: {author}')
+        print(f'Заголовок: {title}')
+        for comment in comments:
+            print(comment.find('span').text)
+        # download_img(img_url, img_name)
         
