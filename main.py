@@ -61,12 +61,17 @@ if __name__ == '__main__':
         soup = BeautifulSoup(response.text, 'lxml')
         relative_url = soup.find('div', class_='bookimage').find('img')['src']
         title, author = soup.find('h1').text.split('::')
-        comments = soup.find_all('div', class_='texts')
-        img_url = urljoin('https://tululu.org/', relative_url)
-        img_name = relative_url.split('/')[-1]
-        print(f'Автор: {author}')
+        genres = []
+        for genre in soup.find('span', class_='d_book').find_all('a'):
+            genres.append(genre.text)
         print(f'Заголовок: {title}')
-        for comment in comments:
-            print(comment.find('span').text)
+        print(genres)
+        # comments = soup.find_all('div', class_='texts')
+        # img_url = urljoin('https://tululu.org/', relative_url)
+        # img_name = relative_url.split('/')[-1]
+        # print(f'Автор: {author}')
+        # print(f'Заголовок: {title}')
+        # for comment in comments:
+        #     print(comment.find('span').text)
         # download_img(img_url, img_name)
         
