@@ -1,4 +1,5 @@
 import os
+import argparse
 
 import requests
 from pathvalidate import sanitize_filename
@@ -11,7 +12,11 @@ def check_for_redirect(response):
         raise requests.HTTPError
 
 
-def download_txt(url, filename, num_book, folder='books/'):
+def download_txt(filename, num_book, folder='books/'):
+    os.makedirs(folder, exist_ok=True)
+    url_book = f"https://tululu.org/txt.php?id={num_book}"
+    response = requests.get(url_book)
+    response.raise_for_status()
     filename = f'{num_book}.{sanitize_filename(filename)}.txt'
     file_path = os.path.join(folder, filename)
     with open(file_path, 'wb') as file:
@@ -27,6 +32,26 @@ def download_img(img_url, filename, folder='images/'):
         file.write(response.content)
 
 
+def parse_book_page(response, num_book):
+    soup = BeautifulSoup(response.text, 'lxml')
+    relative_url = soup.find('div', class_='bookimage').find('img')['src']
+    img_url = urljoin('https://tululu.org/', relative_url)
+    title, author = get_title_author_book(num_book)
+    genres = []
+    comments = []
+    for genre in soup.find('span', class_='d_book').find_all('a'):
+        genres.append(genre.text)
+
+    for comment in soup.find_all('div', class_='texts'):
+        comments.append(comment.find('span').text)
+
+    return {'title': title.strip(),
+            'author': author.strip(),
+            'img_url': img_url,
+            'genres': genres,
+            'comments': comments}
+
+
 def get_title_author_book(num_book):
     url = f'https://tululu.org/b{num_book}/'
     response = requests.get(url)
@@ -36,42 +61,21 @@ def get_title_author_book(num_book):
 
 
 if __name__ == '__main__':
-    # os.makedirs('books', exist_ok=True)
-    # for num_book in range(1, 11):
-    #     url = f"https://tululu.org/txt.php?id={num_book}"
-    #     response = requests.get(url)
-    #     response.raise_for_status()
-    #     try:
-    #         check_for_redirect(response)
-    #     except requests.HTTPError:
-    #         continue
-    #     filename, author = get_title_author_book(num_book)
-    #     filename = filename.strip()
-    #     author = author.strip()
-    #     download_txt(url, filename, num_book)
+    parser = argparse.ArgumentParser(description='')
+    parser.add_argument('start_id', nargs='?', type=int, default=1)
+    parser.add_argument('end_id', nargs='?', type=int, default=11)
+    args = parser.parse_args()
 
-    for i in range(1, 11):
-        url = f'https://tululu.org/b{i}/'
+    for num_book in range(args.start_id, args.end_id):
+        url = f'https://tululu.org/b{num_book}/'
         response = requests.get(url)
         response.raise_for_status()
         try:
             check_for_redirect(response)
-        except requests.HTTPError: 
+        except requests.HTTPError:
             continue
-        soup = BeautifulSoup(response.text, 'lxml')
-        relative_url = soup.find('div', class_='bookimage').find('img')['src']
-        title, author = soup.find('h1').text.split('::')
-        genres = []
-        for genre in soup.find('span', class_='d_book').find_all('a'):
-            genres.append(genre.text)
-        print(f'Заголовок: {title}')
-        print(genres)
-        # comments = soup.find_all('div', class_='texts')
-        # img_url = urljoin('https://tululu.org/', relative_url)
-        # img_name = relative_url.split('/')[-1]
-        # print(f'Автор: {author}')
-        # print(f'Заголовок: {title}')
-        # for comment in comments:
-        #     print(comment.find('span').text)
-        # download_img(img_url, img_name)
-        
+        book_description = parse_book_page(response, num_book)
+        filename = book_description["title"]
+        download_txt(filename, num_book)
+        print(f'Название: {book_description["title"]}')
+        print(f'Автор: {book_description["author"]}')
