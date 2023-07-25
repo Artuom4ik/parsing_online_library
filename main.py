@@ -14,8 +14,11 @@ def check_for_redirect(response):
 
 def download_txt(filename, num_book, folder='books/'):
     os.makedirs(folder, exist_ok=True)
-    url_book = f"https://tululu.org/txt.php?id={num_book}"
-    response = requests.get(url_book)
+    params = {
+        'id': num_book
+    }
+    url_book = f"https://tululu.org/txt.php"
+    response = requests.get(url_book, params=params)
     response.raise_for_status()
     filename = f'{num_book}.{sanitize_filename(filename)}.txt'
     file_path = os.path.join(folder, filename)
@@ -58,7 +61,7 @@ def get_title_author_book(num_book):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='')
     parser.add_argument('start_id', nargs='?', type=int, default=1)
-    parser.add_argument('end_id', nargs='?', type=int, default=11)
+    parser.add_argument('end_id', nargs='?', type=int, default=10)
     args = parser.parse_args()
 
     for num_book in range(args.start_id, args.end_id + 1):
