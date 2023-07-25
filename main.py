@@ -37,13 +37,8 @@ def parse_book_page(response, num_book):
     relative_url = soup.find('div', class_='bookimage').find('img')['src']
     img_url = urljoin('https://tululu.org/', relative_url)
     title, author = get_title_author_book(num_book)
-    genres = []
-    comments = []
-    for genre in soup.find('span', class_='d_book').find_all('a'):
-        genres.append(genre.text)
-
-    for comment in soup.find_all('div', class_='texts'):
-        comments.append(comment.find('span').text)
+    genres = [genre.text for genre in soup.find('span', class_='d_book').find_all('a')]
+    comments = [comment.find('span').text for comment in soup.find_all('div', class_='texts')]
 
     return {'title': title.strip(),
             'author': author.strip(),
@@ -66,7 +61,7 @@ if __name__ == '__main__':
     parser.add_argument('end_id', nargs='?', type=int, default=11)
     args = parser.parse_args()
 
-    for num_book in range(args.start_id, args.end_id):
+    for num_book in range(args.start_id, args.end_id + 1):
         url = f'https://tululu.org/b{num_book}/'
         response = requests.get(url)
         response.raise_for_status()
