@@ -17,7 +17,7 @@ def download_txt(filename, num_book, folder='books/'):
     params = {
         'id': num_book
     }
-    url_book = f"https://tululu.org/txt.php"
+    url_book = "https://tululu.org/txt.php"
     response = requests.get(url_book, params=params)
     response.raise_for_status()
     filename = f'{num_book}.{sanitize_filename(filename)}.txt'
@@ -40,8 +40,10 @@ def parse_book_page(response, num_book):
     relative_url = soup.find('div', class_='bookimage').find('img')['src']
     img_url = urljoin('https://tululu.org/', relative_url)
     title, author = get_title_author_book(num_book)
-    genres = [genre.text for genre in soup.find('span', class_='d_book').find_all('a')]
-    comments = [comment.find('span').text for comment in soup.find_all('div', class_='texts')]
+    genres = [genre.text
+            for genre in soup.find('span', class_='d_book').find_all('a')]
+    comments = [comment.find('span').text
+            for comment in soup.find_all('div', class_='texts')]
 
     return {'title': title.strip(),
             'author': author.strip(),
@@ -75,5 +77,3 @@ if __name__ == '__main__':
         book_description = parse_book_page(response, num_book)
         filename = book_description["title"]
         download_txt(filename, num_book)
-        print(f'Название: {book_description["title"]}')
-        print(f'Автор: {book_description["author"]}')
