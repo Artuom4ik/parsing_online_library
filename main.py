@@ -1,10 +1,28 @@
 import os
 import argparse
+import logging
 
 import requests
 from pathvalidate import sanitize_filename
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
+
+
+def download_book(book_id):
+    url = f'https://tululu.org/b{book_id}/'
+    response = requests.get(url)
+    response.raise_for_status()
+    try:
+        check_for_redirect(response)
+        book_description = parse_book_page(response.text, book_id)
+        name_book = book_description["title"]
+        img_url = book_description['img_url']
+        name_img = img_url.split('/')[-1]
+        download_txt(name_book, book_id)
+        download_img(img_url, name_img)
+        logging.info(f'Книга по номером {book_id}, скачалась успешно')
+    except requests.exceptions.HTTPError:
+        logging.error(f'Ошибка скачивания книги под номером {book_id}')
 
 
 def get_range():
@@ -17,7 +35,7 @@ def get_range():
 
 def check_for_redirect(response):
     if response.history:
-        raise requests.HTTPError
+        raise requests.exceptions.HTTPError
 
 
 def download_txt(filename, num_book, folder='books/'):
@@ -28,6 +46,7 @@ def download_txt(filename, num_book, folder='books/'):
     url_book = "https://tululu.org/txt.php"
     response = requests.get(url_book, params=params)
     response.raise_for_status()
+    check_for_redirect(response)
     filename = f'{num_book}.{sanitize_filename(filename)}.txt'
     file_path = os.path.join(folder, filename)
     with open(file_path, 'wb') as file:
@@ -73,16 +92,7 @@ def get_title_author_book(num_book):
 
 
 if __name__ == '__main__':
-    start_id, end_id = get_range()    
-
+    start_id, end_id = get_range()
+    logging.basicConfig(filename='app.log', filemode='w', level=logging.INFO, encoding='utf-8')
     for num_book in range(start_id, end_id + 1):
-        url = f'https://tululu.org/b{num_book}/'
-        response = requests.get(url)
-        response.raise_for_status()
-        try:
-            check_for_redirect(response)
-        except requests.HTTPError:
-            continue
-        book_description = parse_book_page(response.text, num_book)
-        name_book = book_description["title"]
-        download_txt(name_book, num_book)
+        download_book(num_book)
