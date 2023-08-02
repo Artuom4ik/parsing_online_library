@@ -10,6 +10,7 @@ if __name__ == '__main__':
     response = requests.get(url)
     response.raise_for_status()
     soup = BeautifulSoup(response.text, 'lxml')
-    book_id = soup.find('div', id='content').find('table').find_all('tr')[1].find('a')['href']
-    book_url = urljoin('https://tululu.org/', book_id)
-    print(book_url)
+    for book in soup.find('div', id='content').find_all('table'):
+        book_id = book.find_all('tr')[1].find('a')['href']
+        book_url = urljoin('https://tululu.org/', book_id)
+        print(book_url)
