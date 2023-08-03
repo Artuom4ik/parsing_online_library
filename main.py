@@ -1,6 +1,7 @@
 import os
 import argparse
 import logging
+import time
 
 import requests
 from pathvalidate import sanitize_filename
@@ -9,20 +10,34 @@ from urllib.parse import urljoin
 
 
 def download_book(book_id):
-    url = f'https://tululu.org/b{book_id}/'
-    response = requests.get(url)
-    response.raise_for_status()
-    try:
-        check_for_redirect(response)
-        book_description = parse_book_page(response.text, book_id)
-        name_book = book_description["title"]
-        img_url = book_description['img_url']
-        name_img = img_url.split('/')[-1]
-        download_txt(name_book, book_id)
-        download_img(img_url, name_img)
-        logging.info(f'Книга по номером {book_id}, скачалась успешно')
-    except requests.exceptions.HTTPError:
-        logging.error(f'Ошибка скачивания книги под номером {book_id}')
+    first_reconnect = True
+    while True:
+        try:
+            url = f'https://tululu.org/b{book_id}/'
+            response = requests.get(url)
+            response.raise_for_status()
+            check_for_redirect(response)
+            book_description = parse_book_page(response.text)
+            name_book = book_description["title"]
+            img_url = book_description['img_url']
+            name_img = img_url.split('/')[-1]
+            download_txt(name_book, book_id)
+            download_img(img_url, name_img)
+            logging.info(f'Книга по номером {book_id}, скачалась успешно')
+            return response.status_code
+        except requests.exceptions.HTTPError:
+            logging.error(f'Ошибка скачивания книги под номером {book_id}')
+            break
+        except requests.exceptions.ConnectionError:
+            if first_reconnect:
+                logging.error('Разрыв соединения.')
+                logging.info('Идет переподключение, займет 5 секунд.')
+                time.sleep(5)
+                first_reconnect = False
+            else:
+                logging.error('Соединение снова разорвано.')
+                logging.info('Идет переподключение, займет 15 секунд.')
+                time.sleep(15)
 
 
 def get_range():
@@ -62,11 +77,11 @@ def download_img(img_url, filename, folder='images/'):
         file.write(response.content)
 
 
-def parse_book_page(page, num_book):
+def parse_book_page(page):
     soup = BeautifulSoup(page, 'lxml')
     relative_url = soup.find('div', class_='bookimage').find('img')['src']
     img_url = urljoin('https://tululu.org/', relative_url)
-    title, author = get_title_author_book(num_book)
+    title, author = get_title_author_book(page)
     genre_tags = soup.find('span', class_='d_book').find_all('a')
     comments_tags = soup.find_all('div', class_='texts')
     genres = [genre.text
@@ -83,12 +98,9 @@ def parse_book_page(page, num_book):
     }
 
 
-def get_title_author_book(num_book):
-    url = f'https://tululu.org/b{num_book}/'
-    response = requests.get(url)
-    response.raise_for_status()
-    soup = BeautifulSoup(response.text, 'lxml')
-    return soup.find('h1').text.split('::')
+def get_title_author_book(page):
+    soup = BeautifulSoup(page, 'lxml')
+    return 
 
 
 if __name__ == '__main__':
