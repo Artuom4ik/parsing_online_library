@@ -100,6 +100,11 @@ def parse_book_page(page):
 
 if __name__ == '__main__':
     start_id, end_id = get_range()
-    logging.basicConfig(filename='app.log', filemode='w', level=logging.INFO, encoding='utf-8')
+    logging.basicConfig(
+        filename='app.log',
+        filemode='w',
+        level=logging.INFO,
+        encoding='utf-8'
+    )
     for num_book in range(start_id, end_id + 1):
         download_book(num_book)
