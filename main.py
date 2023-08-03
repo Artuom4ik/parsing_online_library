@@ -81,7 +81,7 @@ def parse_book_page(page):
     soup = BeautifulSoup(page, 'lxml')
     relative_url = soup.find('div', class_='bookimage').find('img')['src']
     img_url = urljoin('https://tululu.org/', relative_url)
-    title, author = get_title_author_book(page)
+    title, author = soup.find('h1').text.split('::')
     genre_tags = soup.find('span', class_='d_book').find_all('a')
     comments_tags = soup.find_all('div', class_='texts')
     genres = [genre.text
@@ -96,11 +96,6 @@ def parse_book_page(page):
         'genres': genres,
         'comments': comments
     }
-
-
-def get_title_author_book(page):
-    soup = BeautifulSoup(page, 'lxml')
-    return 
 
 
 if __name__ == '__main__':
