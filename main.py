@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 
 
-def download_book(book_id):
+def download_book(book_id, skip_txt, skip_imgs, dest_folder):
     first_reconnect = True
     while True:
         try:
@@ -21,8 +21,10 @@ def download_book(book_id):
             name_book = book_description["title"]
             img_url = book_description['img_url']
             name_img = img_url.split('/')[-1]
-            download_txt(name_book, book_id)
-            download_img(img_url, name_img)
+            if not skip_txt:
+                download_txt(name_book, book_id, dest_folder)
+            if not skip_imgs:
+                download_img(img_url, name_img, dest_folder)
             logging.info(f'Книга по номером {book_id}, скачалась успешно')
             return response.status_code
         except requests.exceptions.HTTPError:
@@ -53,8 +55,9 @@ def check_for_redirect(response):
         raise requests.exceptions.HTTPError
 
 
-def download_txt(filename, num_book, folder='books/'):
-    os.makedirs(folder, exist_ok=True)
+def download_txt(filename, num_book, dest_folder, folder='books/'):
+    path = os.path.join(dest_folder, folder)
+    os.makedirs(path, exist_ok=True)
     params = {
         'id': num_book
     }
@@ -63,16 +66,17 @@ def download_txt(filename, num_book, folder='books/'):
     response.raise_for_status()
     check_for_redirect(response)
     filename = f'{num_book}.{sanitize_filename(filename)}.txt'
-    file_path = os.path.join(folder, filename)
+    file_path = os.path.join(path, filename)
     with open(file_path, 'wb') as file:
         file.write(response.content)
 
 
-def download_img(img_url, filename, folder='images/'):
-    os.makedirs(folder, exist_ok=True)
+def download_img(img_url, filename, dest_folder, folder='images/'):
+    path = os.path.join(dest_folder, folder)
+    os.makedirs(path, exist_ok=True)
     response = requests.get(img_url)
     response.raise_for_status()
-    file_path = os.path.join(folder, filename)
+    file_path = os.path.join(path, filename)
     with open(file_path, 'wb') as file:
         file.write(response.content)
 

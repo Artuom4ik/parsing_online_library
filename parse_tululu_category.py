@@ -10,25 +10,26 @@ from urllib.parse import urljoin
 from main import parse_book_page, download_book
 
 
-def get_range(file_path):
+def get_range():
     parser = argparse.ArgumentParser(description='')
     parser.add_argument('--start_page', nargs='?', type=int, default=1)
     parser.add_argument('--end_page', nargs='?', type=int, default=702)
-    parser.add_argument('--dest_folder', nargs='?', type=str, default='')
+    parser.add_argument('--dest_folder', nargs='?', type=str, default='./')
     parser.add_argument('--skip_imgs', action='store_true')
     parser.add_argument('--skip_txt', action='store_true')
-    parser.add_argument('--json_path', nargs='?', type=str, default=file_path)
+    parser.add_argument('--json_path', nargs='?', type=str, default='book_description.json')
     args = parser.parse_args()
     return (
         args.start_page, 
-        args.end_page, 
+        args.end_page,
+        args.dest_folder, 
         args.skip_imgs, 
         args.skip_txt, 
         args.json_path
     )
 
 
-def download_all_book(page, skip_txt, skip_imgs, json_path):
+def download_all_book(page, skip_txt, skip_imgs, json_path, dest_folder):
     url = f"https://tululu.org/l55/{page}"
     response = requests.get(url)
     response.raise_for_status()
@@ -45,7 +46,7 @@ def download_all_book(page, skip_txt, skip_imgs, json_path):
             response.raise_for_status()
             book_description = parse_book_page(response.text)
             books["books"].append(book_description)
-            download_book(book_num, skip_txt, skip_imgs)
+            download_book(book_num, skip_txt, skip_imgs, dest_folder)
     with open(json_path, 'w', encoding='utf8') as json_file:
         json.dump(books, json_file, indent=4, ensure_ascii=False)
 
@@ -57,9 +58,8 @@ if __name__ == '__main__':
         level=logging.INFO,
         encoding='utf-8'
     )
-    folder = './'
-    json_filename = 'book_description.json'
-    file_path = os.path.join(folder, json_filename)
-    start_page, end_page, skip_imgs, skip_txt, json_path = get_range(file_path)
+    start_page, end_page, dest_folder, skip_imgs, skip_txt, json_path = get_range()
+    os.makedirs(dest_folder, exist_ok=True)
+    json_path = os.path.join(dest_folder, json_path)
     for page in range(start_page, end_page):
-        download_all_book(page, skip_txt, skip_imgs, json_path)
+        download_all_book(page, skip_txt, skip_imgs, json_path, dest_folder)
