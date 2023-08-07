@@ -46,8 +46,17 @@ def get_range():
     parser = argparse.ArgumentParser(description='')
     parser.add_argument('start_id', nargs='?', type=int, default=1)
     parser.add_argument('end_id', nargs='?', type=int, default=10)
+    parser.add_argument('--dest_folder', nargs='?', type=str, default='./')
+    parser.add_argument('--skip_imgs', action='store_true')
+    parser.add_argument('--skip_txt', action='store_true')
     args = parser.parse_args()
-    return args.start_id, args.end_id
+    return (
+        args.start_id,
+        args.end_id,
+        args.dest_folder,
+        args.skip_imgs,
+        args.skip_txt
+    )
 
 
 def check_for_redirect(response):
@@ -103,7 +112,7 @@ def parse_book_page(page):
 
 
 if __name__ == '__main__':
-    start_id, end_id = get_range()
+    start_id, end_id, dest_folder, skip_imgs, skip_txt = get_range()
     logging.basicConfig(
         filename='app.log',
         filemode='w',
@@ -111,4 +120,4 @@ if __name__ == '__main__':
         encoding='utf-8'
     )
     for num_book in range(start_id, end_id + 1):
-        download_book(num_book)
+        download_book(num_book, skip_txt, skip_imgs, dest_folder)
