@@ -9,7 +9,7 @@ ___
 * [Требования](https://github.com/Artuom4ik/parsing_online_library#%D0%B4%D0%BB%D1%8F-%D0%B7%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0-%D0%BF%D1%80%D0%BE%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D1%8B-%D1%82%D1%80%D0%B5%D0%B1%D1%83%D0%B5%D1%82%D1%81%D1%8F)
 * [Как пользоваться скриптом](https://github.com/Artuom4ik/parsing_online_library#%D0%BA%D0%B0%D0%BA-%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D1%82%D1%8C%D1%81%D1%8F-%D1%81%D0%BA%D1%80%D0%B8%D0%BF%D1%82%D0%BE%D0%BC)
 * [Описание каждой функции](https://github.com/Artuom4ik/parsing_online_library#%D0%BE%D0%BF%D0%B8%D1%81%D0%B0%D0%BD%D0%B8%D0%B5-%D0%BA%D0%B0%D0%B6%D0%B4%D0%BE%D0%B9-%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B8)
-* [Настройка запуска скрипта main.py](https://github.com/Artuom4ik/parsing_online_library#%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0-%D0%B7%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0-%D1%81%D0%BA%D1%80%D0%B8%D0%BF%D1%82%D0%B0-mainpy)
+* [Настройка запуска скрипта tululu.py](https://github.com/Artuom4ik/parsing_online_library#%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0-%D0%B7%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0-%D1%81%D0%BA%D1%80%D0%B8%D0%BF%D1%82%D0%B0tululupy)
 * [Настройка запуска скрипта parse_tululu_category.py](https://github.com/Artuom4ik/parsing_online_library#%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0-%D0%B7%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0-%D1%81%D0%BA%D1%80%D0%B8%D0%BF%D1%82%D0%B0-parse_tululu_categorypy)
 * [Цель проекта](https://github.com/Artuom4ik/parsing_online_library#%D1%86%D0%B5%D0%BB%D1%8C-%D0%BF%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D0%B0)
 ___
@@ -21,15 +21,15 @@ ___
  pip install -r requirements.txt
  ```
 ___
-#### Если хотите скачать определенное количество книг, используйте скрипт ```main.py```
+#### Если хотите скачать определенное количество книг, используйте скрипт ```tululu.py```
 ##### Как пользоваться скриптом:
 * Чтобы запустить программу, требуется написать в консоль:
 ```
-python main.py
+python tululu.py
 ```
 * В процессе запуска программы, создастся папка для книг и картинок(название папок стоят по умолчанию, но вы можете изменить название).
 * По умолчанию скачается 10 книг.
-* Если вы хотите скачать своё количество книг, то вот [ссылка](https://github.com/Artuom4ik/parsing_online_library#%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0-%D0%B7%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0-%D1%81%D0%BA%D1%80%D0%B8%D0%BF%D1%82%D0%B0-mainpy) на дополнительные параметры.
+* Если вы хотите скачать своё количество книг, то вот [ссылка]() на дополнительные параметры.
 ___
 #### Если хотите скачать книги с жанром ```Научная фантастика```, используйте скрипт ```parse_tululu_category.py```
 ##### Как пользоваться скриптом:
@@ -49,25 +49,25 @@ ___
 * ```get_title_author_book()``` - возращает заголовок и автора книги.
 * ```download_book()``` - связывает выше перечисленные функции, скачивает текст книги и изображение к ней. 
 ___
-### Настройка запуска скрипта ```main.py```
+### Настройка запуска скрипта `` tululu.py```
 * ```start_id``` и ```end_id``` - диапозон скачивания страниц.
     * Что бы выставить свой диапазон требуется написать:
     ```
-    python main.py --start_id --end_id
+    python tululu.py --start_id --end_id
     ```
 * Параметры ```skip_imgs``` и ```skip_txt``` отвечают за то чтобы скачивать ли текст или изображения книг.
     * Если вы не хотите скачивать текст книг, то требуется к запуску добавть аргумент:
     ```
-    python main.py --skip_txt
+    python tululu.py --skip_txt
     ```
     * Если вы не хотите скачивать изображение книг, то требуется к запуску добавть аргумент:
     ```
-    python main.py --skip_imgs
+    python tululu.py --skip_imgs
     ```
 * Параметр ```dest_folder``` отвечает за путь к каталогу с результатами парсинга: картинкам, книгам. По умолчанию стоит корневая папка.
     * Если вы хотите сохранить результат в свою папку, то требуется добавить аргумент:
     ```
-    python main.py --dest_folder
+    python tululu.py --dest_folder
     ```
 ___
 ### Настройка запуска скрипта ```parse_tululu_category.py```
