@@ -44,8 +44,8 @@ def download_book(book_id, skip_txt, skip_imgs, dest_folder):
 
 def get_range():
     parser = argparse.ArgumentParser(description='')
-    parser.add_argument('start_id', nargs='?', type=int, default=1)
-    parser.add_argument('end_id', nargs='?', type=int, default=10)
+    parser.add_argument('--start_id', nargs='?', type=int, default=1)
+    parser.add_argument('--end_id', nargs='?', type=int, default=10)
     parser.add_argument('--dest_folder', nargs='?', type=str, default='./')
     parser.add_argument('--skip_imgs', action='store_true')
     parser.add_argument('--skip_txt', action='store_true')
