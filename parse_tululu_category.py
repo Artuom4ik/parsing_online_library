@@ -29,7 +29,7 @@ def get_range():
     )
 
 
-def download_all_book(page, skip_txt, skip_imgs, json_path, dest_folder):
+def download_all_books(page, skip_txt, skip_imgs, json_path, dest_folder):
     url = f"https://tululu.org/l55/{page}"
     response = requests.get(url)
     response.raise_for_status()
@@ -62,4 +62,4 @@ if __name__ == '__main__':
     os.makedirs(dest_folder, exist_ok=True)
     json_path = os.path.join(dest_folder, json_path)
     for page in range(start_page, end_page):
-        download_all_book(page, skip_txt, skip_imgs, json_path, dest_folder)
+        download_all_books(page, skip_txt, skip_imgs, json_path, dest_folder)
