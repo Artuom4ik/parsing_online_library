@@ -9,7 +9,7 @@ ___
 * [Требования](https://github.com/Artuom4ik/parsing_online_library#%D0%B4%D0%BB%D1%8F-%D0%B7%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0-%D0%BF%D1%80%D0%BE%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D1%8B-%D1%82%D1%80%D0%B5%D0%B1%D1%83%D0%B5%D1%82%D1%81%D1%8F)
 * [Как пользоваться скриптом](https://github.com/Artuom4ik/parsing_online_library#%D0%BA%D0%B0%D0%BA-%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D1%82%D1%8C%D1%81%D1%8F-%D1%81%D0%BA%D1%80%D0%B8%D0%BF%D1%82%D0%BE%D0%BC)
 * [Описание каждой функции](https://github.com/Artuom4ik/parsing_online_library#%D0%BE%D0%BF%D0%B8%D1%81%D0%B0%D0%BD%D0%B8%D0%B5-%D0%BA%D0%B0%D0%B6%D0%B4%D0%BE%D0%B9-%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D0%B8)
-* [Настройка запуска скрипта parse_tululu_category.py]()
+* [Настройка запуска скрипта parse_tululu_category.py](https://github.com/Artuom4ik/parsing_online_library#%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0-%D0%B7%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0-%D1%81%D0%BA%D1%80%D0%B8%D0%BF%D1%82%D0%B0-parse_tululu_categorypy)
 * [Цель проекта](https://github.com/Artuom4ik/parsing_online_library#%D1%86%D0%B5%D0%BB%D1%8C-%D0%BF%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D0%B0)
 ___
 ### Для запуска программы требуется:
@@ -36,7 +36,7 @@ ___
 python parse_tululu_category.py
 ```
 * Далее скрипт скачает все книги жанра - Научная фантастика(их более 70000).
-* Если вы хотите скачать книги с определенными параметрами, то вот [ссылка]() на настройку запуска скрипта.
+* Если вы хотите скачать книги с определенными параметрами, то вот [ссылка](https://github.com/Artuom4ik/parsing_online_library#%D0%BD%D0%B0%D1%81%D1%82%D1%80%D0%BE%D0%B9%D0%BA%D0%B0-%D0%B7%D0%B0%D0%BF%D1%83%D1%81%D0%BA%D0%B0-%D1%81%D0%BA%D1%80%D0%B8%D0%BF%D1%82%D0%B0-parse_tululu_categorypy) на настройку запуска скрипта.
 ___
 ### Описание каждой функции:
 * ```get_range()``` - функция ввода данных. Возращает диапозон скачивания книг.
