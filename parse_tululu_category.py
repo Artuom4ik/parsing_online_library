@@ -17,14 +17,19 @@ def get_range():
     parser.add_argument('--dest_folder', nargs='?', type=str, default='./')
     parser.add_argument('--skip_imgs', action='store_true')
     parser.add_argument('--skip_txt', action='store_true')
-    parser.add_argument('--json_path', nargs='?', type=str, default='book_description.json')
+    parser.add_argument(
+        '--json_path',
+        nargs='?',
+        type=str,
+        default='book_description.json'
+    )
     args = parser.parse_args()
     return (
-        args.start_page, 
+        args.start_page,
         args.end_page,
-        args.dest_folder, 
-        args.skip_imgs, 
-        args.skip_txt, 
+        args.dest_folder,
+        args.skip_imgs,
+        args.skip_txt,
         args.json_path
     )
 
