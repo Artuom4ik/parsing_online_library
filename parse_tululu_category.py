@@ -7,7 +7,7 @@ import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 
-from main import parse_book_page, download_book
+from tululu import parse_book_page, download_book
 
 
 def get_range():
